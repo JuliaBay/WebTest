@@ -1,8 +1,7 @@
 <?php
 	require_once("$_SERVER[DOCUMENT_ROOT]/../dal.inc.php");
 	require_once("$_SERVER[DOCUMENT_ROOT]/auth.php");
-
-$answ_counter=1;
+	$answ_counter =0;
 	//echo "<xmp>";print_r($_POST);echo "</xmp>";
 	if(isset($_POST["Go"]))
 	{		
@@ -38,7 +37,9 @@ $answ_counter=1;
 				//header("Location: /testeditor/edit_question.php?qst_id=$qst_id");
 			}	
 			else {
-				DBEditQuestion($f_ID,$f_text,$f_type_ID); 
+				DBEditQuestion($f_ID,$f_text,$f_type_ID);
+				//echo "<xmp>";print_r($form_fields);echo "</xmp>";
+				DBEditAnswers($f_ID,$form_fields["answ"],$form_fields["istrue"]);
 				$qst_id = $f_ID;
 			}
 			//echo $qst_id;
@@ -87,10 +88,17 @@ $answ_counter=1;
 			Варианты ответов<br/>
 			<?while($Answer=DBFetchAnswer($Question["ID"])):?>
 				<?//printf($Question["ID"]);?>
-				<textarea id="answ<?=$Answer["ID"]?>" name="answ[<?=$Question["ID"]?>]"><?=$Answer["text"]?></textarea>
+				<?if($Answer["istrue"]==1) {?>
+					<input id="istrue<?=$Answer["ID"]?>" name="istrue[<?=$Question["ID"]?>]" type="radio" checked value="<?=$Answer["ID"]?>"/> 
+				<?;}
+				else {?>
+					<input id="istrue<?=$Answer["ID"]?>" name="istrue[<?=$Question["ID"]?>]" type="radio" value="<?=$Answer["ID"]?>"/> 					
+				<?;}?>
+				<textarea id="answ<?=$Question["ID"]?>" name="answ[<?=$Answer["ID"]?>]"><?=$Answer["text"]?></textarea>
+				<?//$a_ID[$answ_counter] = $Answer["ID"];?>
 				<?//printf($Answer["ID"]);?>
 				<?/*<label for="answ<?=$Answer["ID"]?>"><?=$Answer["text"]?></label><br/>*/?>
-				<?$answ_counter++;?>
+				<?//$answ_counter++;?><br/>
 			<?endwhile;?>
 			<?if(isset($form_fields["f_ID"])):?>
 			<input name="f_ID" type="hidden" value=<?=$form_fields["f_ID"]?>/>
@@ -104,11 +112,11 @@ $answ_counter=1;
 			Условие задания<br/>
 			<textarea id="f_text" name="f_text" cols="100" rows="5"><?=$form_fields["f_text"]?></textarea><br/>
 			Варианты ответов<br/>
-			<input name="istrue[1]" type="checkbox" />
+			<input name="istrue[1]" type="radio" />
 			<textarea name="text[1]" cols="100" rows="3"><?=$form_fields["f_answ"]?></textarea><br/>
-			<input name="istrue[2]" type="checkbox" />
+			<input name="istrue[2]" type="radio" />
 			<textarea name="text[2]" cols="100" rows="3"><?=$form_fields["f_answ"]?></textarea><br/>
-			<input name="istrue[3]" type="checkbox" />
+			<input name="istrue[3]" type="radio" />
 			<textarea name="text[3]" cols="100" rows="3"><?=$form_fields["f_answ"]?></textarea><br/>
 			<input id="Send" name="Go" type="Submit"  value="Сохранить"/>
 		</form>

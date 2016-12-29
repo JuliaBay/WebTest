@@ -46,20 +46,21 @@
 				<nav>
 					<ul class="aside-menu">
 						<?// print_r($_SESSION);?>
+						<?//DBEditAnswers($a_ID, $form_fields["answ"],$form_fields["istrue"]);?>
 						<li><a href="http://webtest/professor-tests.php">СПИСОК ТЕСТОВ</a></li>
 						<li id="li" class="active">
 							<?if(isset($_SESSION["test_ID"])):?>
 								<a href="/testeditor/edit_test.php?edit_id=<?=$_SESSION["test_ID"]?>">РЕДАКТИРОВАТЬ ТЕСТ</a>
 								<ul >
 								<?while($question=DBFetchQuestion($_SESSION["test_ID"])):?>
-								<li class="active"><a href="/testeditor/edit_question.php?qst_id=<?=$question["ID"]?>"><?=substr($question["text"],0,10)?></a><button type="del" onclick="del_qst(<?=$question["ID"]?>)">X</button></li>
+								<li class="q"><a href="/testeditor/edit_question.php?qst_id=<?=$question["ID"]?>"><?=substr($question["text"],0,20)?></a><button type="del" onclick="del_qst(<?=$question["ID"]?>)">X</button></li>
 								<?endwhile;?>
 								</ul>
 							<?else:?>
 								<a href="/testeditor/edit_test.php">СОЗДАТЬ ТЕСТ</a>
 							<?endif;?>
 						</li>
-                        <button name="q" type="aside" onclick="add_question()">+ Вопрос</button>
+                        <button name="q" type="aside" onclick=""><a href="/testeditor/edit_question.php">+ Вопрос</a></button>
                             
                         
 						<script language="javascript">

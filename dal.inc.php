@@ -284,6 +284,19 @@ function DBEditQuestion($f_ID,$f_text,$f_type_ID)
 	if(!$res)
 		throw new Exception("ОШИБКА СУБД: [".mysql_errno()."] ".mysql_error(),EXP_QUERYERR);
 }
+function DBEditAnswers($f_ID,$answ,$istrue)
+{
+	global $cms_db_link;
+	foreach($answ as $k=>$v)
+	{
+		//echo "<xmp> UPDATE Answers SET Answers.text='".$answ[$k]."', Answers.istrue='".(($istrue[$f_ID]==$k)?1:0)."' WHERE ID=$k </xmp>";
+		//print_r($istrue[$f_ID]);
+		$res=mysql_query("UPDATE Answers SET Answers.text='$answ[$k]', Answers.istrue='".(($istrue[$f_ID]==$k)?1:0)."' WHERE ID=$k",$cms_db_link);
+	}
+	//mysql_query("UPDATE Students SET grp_ID='$f_grp_ID' WHERE usr_ID=$f_ID",$cms_db_link);
+	if(!$res)
+		throw new Exception("ОШИБКА СУБД: [".mysql_errno()."] ".mysql_error(),EXP_QUERYERR);
+}
 function GetTestData($test_ID)
 {
 	if(!$test_ID) return;
@@ -342,6 +355,21 @@ function DBFetchTypeTest()
 			throw new Exception("ОШИБКА СУБД: [".mysql_errno()."] ".mysql_error(),EXP_QUERYERR);
 	}
 	
+	return mysql_fetch_array($res);
+}
+function DBGetTestName($test_ID)
+{
+	//printf($test_ID);
+	global $cms_db_link;
+	static $is_first,$res;
+	if($is_first==0)
+	{
+		$res=mysql_query("SELECT * FROM Tests WHERE ID=$test_ID",$cms_db_link);
+		$is_first=1;
+		if(!$res)
+			throw new Exception("ОШИБКА СУБД: [".mysql_errno()."] ".mysql_error(),EXP_QUERYERR);
+	}
+	//print_r(mysql_fetch_array($res));
 	return mysql_fetch_array($res);
 }
 function DBEditTest($f_ID,$f_name,$f_type_ID,$f_est_ID)
@@ -428,13 +456,16 @@ function CheckTest($answ)
 	global $cms_db_link;
 
 	$right_answ=0;
-	foreach($answ as $k=>$v)
-	{
-		$res=mysql_query("SELECT * FROM Answers WHERE ID=$v",$cms_db_link);
-		if($answ=mysql_fetch_array($res))
-			if($answ["istrue"]==1)
-				$right_answ++;
+	if($answ) {
+		foreach($answ as $k=>$v)
+		{
+			$res=mysql_query("SELECT * FROM Answers WHERE ID=$v",$cms_db_link);
+			if($answ=mysql_fetch_array($res))
+				if($answ["istrue"]==1)
+					$right_answ++;
+		}
 	}
+
 
 	return $right_answ;
 }

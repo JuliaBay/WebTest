@@ -5,7 +5,15 @@ body {
 	border-top: 5px solid #f9f9f9;
 	margin: 0;
 }
-
+.tstplayer{
+	margin: 10px 500px 100px 250px;
+	color: #8f8f8f;
+	font: 19px 'Roboto',sans-serif;
+}
+.tstname{
+	font: 40px 'Roboto',sans-serif;
+	color: #5a5a5a;
+}
 img {
 	border: 0;
 }
@@ -159,7 +167,7 @@ nav li {
 	border-top: 1px solid #e7e7e7;
 }
 
-.aside-menu li[type="q"] {
+.aside-menu li.q {
 	margin: 10px -10px -10px 27px;
 }
 
